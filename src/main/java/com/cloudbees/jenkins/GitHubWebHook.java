@@ -1,7 +1,5 @@
 package com.cloudbees.jenkins;
 
-import com.cloudbees.jenkins.GitHubPushTrigger.DescriptorImpl;
-
 import hudson.Extension;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractProject;
@@ -154,10 +152,10 @@ public class GitHubWebHook implements UnprotectedRootAction {
      */
     @RequirePOST
     public void doIndex(StaplerRequest req, StaplerResponse rsp) {
-        if (req.getHeader(URL_VALIDATION_HEADER)!=null) {
+        if (req.getHeader(URL_VALIDATION_HEADER) != null) {
             // when the configuration page provides the self-check button, it makes a request with this header.
             RSAPublicKey key = identity.getPublic();
-            rsp.setHeader(X_INSTANCE_IDENTITY,new String(Base64.encodeBase64(key.getEncoded())));
+            rsp.setHeader(X_INSTANCE_IDENTITY, new String(Base64.encodeBase64(key.getEncoded())));
             rsp.setStatus(200);
             return;
         }
@@ -169,7 +167,14 @@ public class GitHubWebHook implements UnprotectedRootAction {
                 throw new IllegalArgumentException("Not intended to be browsed interactively (must specify payload parameter). " +
                         "Make sure payload version is 'application/vnd.github+form'.");
             }
-            processGitHubPayload(payload,GitHubPushTrigger.class);
+            processGitHubPayload(payload, GitHubPushTrigger.class);
+            if (payload == null) {
+                throw new IllegalArgumentException("Not intended to be browsed interactively (must specify payload parameter). " +
+                        "Make sure payload version is 'application/vnd.github+form'.");
+            }
+            processGitHubPayload(payload, GitHubCreateTrigger.class);
+        } else if( eventType == "create") {
+            String payload = req.getParameter("payload");
         } else if (eventType != null && !eventType.isEmpty()) {
             throw new IllegalArgumentException("Github Webhook event of type " + eventType + " is not supported. " +
                     "Only push events are current supported");

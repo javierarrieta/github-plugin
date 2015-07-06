@@ -28,7 +28,7 @@ public class GitHubPushTriggerConfigSubmitTest extends HudsonTestCase {
         f.getInputByName("_.username").setValueAttribute("jenkins");
         submit(f);
 
-        GitHubPushTrigger.DescriptorImpl d = getDescriptor();
+        DescriptorImpl d = getDescriptor();
         assertTrue(d.isManageHook());
         assertEquals(new URL(WEBHOOK_URL), d.getHookUrl());
 
@@ -47,12 +47,12 @@ public class GitHubPushTriggerConfigSubmitTest extends HudsonTestCase {
         f.getInputByValue("none").setChecked(true);
         submit(f);
 
-        GitHubPushTrigger.DescriptorImpl d = getDescriptor();
+        DescriptorImpl d = getDescriptor();
         assertFalse(d.isManageHook());
     }
 
-    private GitHubPushTrigger.DescriptorImpl getDescriptor() {
-        return (GitHubPushTrigger.DescriptorImpl) GitHubPushTrigger.DescriptorImpl.get();
+    private DescriptorImpl getDescriptor() {
+        return (DescriptorImpl) DescriptorImpl.get();
     }
 
     private WebClient configureWebClient() {

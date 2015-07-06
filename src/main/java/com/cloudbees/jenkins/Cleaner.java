@@ -1,6 +1,5 @@
 package com.cloudbees.jenkins;
 
-import com.cloudbees.jenkins.GitHubPushTrigger.DescriptorImpl;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
